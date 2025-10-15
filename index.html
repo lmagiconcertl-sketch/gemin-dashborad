@@ -14,42 +14,68 @@
             <p>자주 사용하는 AI 서비스와 구독 정보를 관리하세요.</p>
         </header>
 
-        <main>
-            <section class="card">
-                <h2>AI 서비스 바로 가기</h2>
-                <form id="shortcut-form">
-                    <input type="text" id="shortcut-name" placeholder="사이트 이름 (예: 뤼튼)" required>
-                    <input type="url" id="shortcut-url" placeholder="사이트 주소 (https://...)" required>
-                    <button type="submit">바로 가기 추가</button>
-                </form>
-                <div id="shortcut-container" class="shortcut-grid">
-                    </div>
-            </section>
+        <div class="tabs">
+            <div class="tab-buttons">
+                <button class="tab-btn active" data-tab="sites">자주 가는 사이트</button>
+                <button class="tab-btn" data-tab="subscriptions">AI 구독 관리</button>
+            </div>
 
-            <section class="card">
-                <h2>AI 구독 관리</h2>
-                <form id="subscription-form">
-                    <input type="text" id="service-name" placeholder="서비스 이름 (예: ChatGPT Plus)" required>
-                    <input type="text" id="service-cost" placeholder="구독료 (예: 월 20달러)" required>
-                    <input type="text" id="payment-date" placeholder="결제일 (예: 매월 15일)" required>
-                    <button type="submit">구독 추가하기</button>
-                </form>
-                <div class="table-container">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>서비스 이름</th>
-                                <th>구독료</th>
-                                <th>결제일</th>
-                                <th>관리</th>
-                            </tr>
-                        </thead>
-                        <tbody id="subscription-list">
-                            </tbody>
-                    </table>
+            <div id="sites" class="tab-content active">
+                <div class="card">
+                    <form id="shortcut-form">
+                        <input type="text" id="shortcut-name" placeholder="사이트 이름" required>
+                        <input type="url" id="shortcut-url" placeholder="사이트 주소 (https://...)" required>
+                        <select id="shortcut-category">
+                            <option value="conversationalAI">대화형 AI</option>
+                            <option value="generativeAI">생성형 AI</option>
+                            <option value="otherSites">그 외 사이트</option>
+                        </select>
+                        <button type="submit">추가하기</button>
+                    </form>
                 </div>
-            </section>
-        </main>
+                <div id="shortcut-container">
+                    </div>
+            </div>
+
+            <div id="subscriptions" class="tab-content">
+                <div class="card">
+                    <form id="subscription-form">
+                        <input type="text" id="service-name" placeholder="서비스 이름" required>
+                        <input type="number" id="service-cost" placeholder="구독료 (숫자만)" step="any" required>
+                        <select id="service-currency">
+                            <option value="KRW">KRW (₩)</option>
+                            <option value="USD">USD ($)</option>
+                        </select>
+                        <select id="service-type">
+                            <option value="monthly">월간</option>
+                            <option value="yearly">연간</option>
+                        </select>
+                        <button type="submit">구독 추가하기</button>
+                    </form>
+                </div>
+                <div class="card">
+                    <div id="subscription-totals">
+                        </div>
+                </div>
+                <div class="card">
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>서비스 이름</th>
+                                    <th>구분</th>
+                                    <th>구독료 (월)</th>
+                                    <th>구독료 (년)</th>
+                                    <th>관리</th>
+                                </tr>
+                            </thead>
+                            <tbody id="subscription-list">
+                                </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <footer>
             <p>My Personal AI Dashboard</p>
