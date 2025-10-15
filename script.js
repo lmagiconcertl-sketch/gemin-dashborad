@@ -18,14 +18,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const subscriptionList = document.getElementById('subscription-list');
     const subscriptionTotals = document.getElementById('subscription-totals');
 
-    // --- 데이터 로드 ---
+    // --- 데이터 로드 (v4로 업데이트) ---
     const initialShortcuts = {
-        conversationalAI: [{ name: 'ChatGPT', url: 'https://chat.openai.com/' }, { name: 'Gemini', url: 'https://gemini.google.com/' }],
-        generativeAI: [{ name: 'Midjourney', url: 'https://www.midjourney.com/' }, { name: 'Suno', url: 'https://suno.ai/' }],
-        otherSites: [{ name: '어도비스톡', url: 'https://stock.adobe.com/kr' }]
+        conversationalAI: [{ name: 'ChatGPT', url: 'https://chat.openai.com/' }],
+        generativeAI: [{ name: 'Midjourney', url: 'https://www.midjourney.com/' }],
+        otherSites: []
     };
-    let shortcuts = JSON.parse(localStorage.getItem('shortcuts_v3')) || initialShortcuts;
-    let subscriptions = JSON.parse(localStorage.getItem('subscriptions_v3')) || [];
+    let shortcuts = JSON.parse(localStorage.getItem('shortcuts_v4')) || initialShortcuts;
+    let subscriptions = JSON.parse(localStorage.getItem('subscriptions_v4')) || [];
 
     // --- 데이터 저장 ---
     const saveData = (key, data) => localStorage.setItem(key, JSON.stringify(data));
@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
         shortcutContainer.innerHTML = '';
         const categoryNames = { conversationalAI: '대화형 AI', generativeAI: '생성형 AI', otherSites: '그 외 사이트' };
         for (const category in shortcuts) {
-            if (Object.keys(shortcuts[category]).length === 0) continue;
+            if (!shortcuts[category] || shortcuts[category].length === 0) continue;
             const categoryCard = document.createElement('div');
             categoryCard.className = 'card shortcut-category';
             let itemsHTML = shortcuts[category].map((item, index) => {
@@ -65,60 +65,61 @@ document.addEventListener('DOMContentLoaded', () => {
     function renderSubscriptionsAndTotals() {
         subscriptionList.innerHTML = '';
         let totalMonthlyKRW = 0;
+
         subscriptions.forEach((sub, index) => {
             let monthlyKRW = (sub.type === 'monthly') ? ((sub.currency === 'KRW') ? sub.cost : sub.cost * USD_TO_KRW_RATE) : ((sub.currency === 'KRW') ? sub.cost : sub.cost * USD_TO_KRW_RATE) / 12;
             totalMonthlyKRW += monthlyKRW;
+            
+            // --- 다음 갱신일 및 알림 계산 ---
+            const lastPaymentDate = new Date(sub.date + 'T00:00:00'); // 시간대 문제 방지
+            const nextRenewalDate = new Date(lastPaymentDate);
+            if (sub.type === 'monthly') {
+                nextRenewalDate.setMonth(lastPaymentDate.getMonth() + 1);
+            } else { // yearly
+                nextRenewalDate.setFullYear(lastPaymentDate.getFullYear() + 1);
+            }
+            const today = new Date();
+            today.setHours(0,0,0,0); // 시간 제거
+            const diffTime = nextRenewalDate - today;
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+            let renewalStatusHTML = `<span>${nextRenewalDate.toLocaleDateString('ko-KR')}</span>`;
+            if (diffDays >= 0 && diffDays <= 7) {
+                renewalStatusHTML += `<span class="renewal-imminent">${diffDays}일 후 갱신 임박!</span>`;
+            }
+            // --- 계산 로직 끝 ---
+
             const row = document.createElement('tr');
             row.innerHTML = `
-                <td>${sub.name}</td>
-                <td>${sub.type === 'monthly' ? '월간' : '연간'}</td>
+                <td>${sub.name}<span>${sub.type === 'monthly' ? '월간' : '연간'} / ${sub.currency}</span></td>
                 <td>${formatKRW(monthlyKRW)}<span>${formatUSD(monthlyKRW / USD_TO_KRW_RATE)}</span></td>
-                <td>${formatKRW(monthlyKRW * 12)}<span>${formatUSD(monthlyKRW * 12 / USD_TO_KRW_RATE)}</span></td>
+                <td>${renewalStatusHTML}</td>
                 <td class="actions">
                     <button class="edit-btn" data-type="subscription" data-index="${index}">수정</button>
                     <button class="delete-btn" data-type="subscription" data-index="${index}">삭제</button>
                 </td>`;
             subscriptionList.appendChild(row);
         });
+
         const totalMonthlyUSD = totalMonthlyKRW / USD_TO_KRW_RATE;
         subscriptionTotals.innerHTML = `
             <div class="total-box"><h4>월간 총 구독료</h4><div class="price-krw">${formatKRW(totalMonthlyKRW)}</div><div class="price-usd">${formatUSD(totalMonthlyUSD)}</div></div>
             <div class="total-box"><h4>연간 총 구독료</h4><div class="price-krw">${formatKRW(totalMonthlyKRW * 12)}</div><div class="price-usd">${formatUSD(totalMonthlyUSD * 12)}</div></div>`;
     }
-    
+
     // --- 모달 관리 함수 ---
     function openEditModal(type, index, category) {
         let content = '';
         if (type === 'shortcut') {
             const item = shortcuts[category][index];
-            content = `
-                <input type="hidden" id="edit-type" value="shortcut">
-                <input type="hidden" id="edit-category" value="${category}">
-                <input type="hidden" id="edit-index" value="${index}">
-                <label for="edit-shortcut-name">사이트 이름</label><input type="text" id="edit-shortcut-name" value="${item.name}" required>
-                <label for="edit-shortcut-url">사이트 주소</label><input type="url" id="edit-shortcut-url" value="${item.url}" required>
-                <button type="submit">저장하기</button>`;
+            content = `<input type="hidden" id="edit-type" value="shortcut"><input type="hidden" id="edit-category" value="${category}"><input type="hidden" id="edit-index" value="${index}"><label for="edit-shortcut-name">사이트 이름</label><input type="text" id="edit-shortcut-name" value="${item.name}" required><label for="edit-shortcut-url">사이트 주소</label><input type="url" id="edit-shortcut-url" value="${item.url}" required><button type="submit">저장하기</button>`;
         } else if (type === 'subscription') {
             const item = subscriptions[index];
-            content = `
-                <input type="hidden" id="edit-type" value="subscription">
-                <input type="hidden" id="edit-index" value="${index}">
-                <label for="edit-service-name">서비스 이름</label><input type="text" id="edit-service-name" value="${item.name}" required>
-                <label for="edit-service-cost">구독료</label><input type="number" id="edit-service-cost" value="${item.cost}" step="any" required>
-                <label for="edit-service-currency">통화</label><select id="edit-service-currency">
-                    <option value="KRW" ${item.currency === 'KRW' ? 'selected' : ''}>KRW (₩)</option>
-                    <option value="USD" ${item.currency === 'USD' ? 'selected' : ''}>USD ($)</option>
-                </select>
-                <label for="edit-service-type">구분</label><select id="edit-service-type">
-                    <option value="monthly" ${item.type === 'monthly' ? 'selected' : ''}>월간</option>
-                    <option value="yearly" ${item.type === 'yearly' ? 'selected' : ''}>연간</option>
-                </select>
-                <button type="submit">저장하기</button>`;
+            content = `<input type="hidden" id="edit-type" value="subscription"><input type="hidden" id="edit-index" value="${index}"><label for="edit-service-name">서비스 이름</label><input type="text" id="edit-service-name" value="${item.name}" required><label for="edit-service-cost">구독료</label><input type="number" id="edit-service-cost" value="${item.cost}" step="any" required><label for="edit-service-currency">통화</label><select id="edit-service-currency"><option value="KRW" ${item.currency === 'KRW' ? 'selected' : ''}>KRW (₩)</option><option value="USD" ${item.currency === 'USD' ? 'selected' : ''}>USD ($)</option></select><label for="edit-service-type">구분</label><select id="edit-service-type"><option value="monthly" ${item.type === 'monthly' ? 'selected' : ''}>월간</option><option value="yearly" ${item.type === 'yearly' ? 'selected' : ''}>연간</option></select><label for="edit-service-date">마지막 결제일</label><input type="date" id="edit-service-date" value="${item.date}" required><button type="submit">저장하기</button>`;
         }
         editForm.innerHTML = content;
         modal.style.display = 'block';
     }
-    
+
     // --- 이벤트 리스너 ---
     tabs.forEach(tab => tab.addEventListener('click', () => {
         tabs.forEach(t => t.classList.remove('active'));
@@ -131,8 +132,9 @@ document.addEventListener('DOMContentLoaded', () => {
         e.preventDefault();
         const category = document.getElementById('shortcut-category').value;
         if (!category) { alert('카테고리를 선택하세요.'); return; }
+        if (!shortcuts[category]) shortcuts[category] = [];
         shortcuts[category].push({ name: document.getElementById('shortcut-name').value, url: document.getElementById('shortcut-url').value });
-        saveData('shortcuts_v3', shortcuts);
+        saveData('shortcuts_v4', shortcuts);
         renderShortcuts();
         shortcutForm.reset();
     });
@@ -142,30 +144,29 @@ document.addEventListener('DOMContentLoaded', () => {
         subscriptions.push({
             name: document.getElementById('service-name').value, cost: parseFloat(document.getElementById('service-cost').value),
             currency: document.getElementById('service-currency').value, type: document.getElementById('service-type').value,
+            date: document.getElementById('service-date').value
         });
-        saveData('subscriptions_v3', subscriptions);
+        saveData('subscriptions_v4', subscriptions);
         renderSubscriptionsAndTotals();
         subscriptionForm.reset();
     });
     
     document.body.addEventListener('click', e => {
         const target = e.target;
-        const type = target.dataset.type;
-        const index = target.dataset.index;
-        const category = target.dataset.category;
-
-        if (target.classList.contains('edit-btn')) {
-            openEditModal(type, index, category);
+        if (target.closest('.edit-btn')) {
+            const btn = target.closest('.edit-btn');
+            openEditModal(btn.dataset.type, btn.dataset.index, btn.dataset.category);
         }
-        if (target.classList.contains('delete-btn') || target.classList.contains('delete-btn-icon')) {
+        if (target.closest('.delete-btn, .delete-btn-icon')) {
             if (!confirm('정말로 삭제하시겠습니까?')) return;
-            if (type === 'shortcut') {
-                shortcuts[category].splice(index, 1);
-                saveData('shortcuts_v3', shortcuts);
+            const btn = target.closest('.delete-btn, .delete-btn-icon');
+            if (btn.dataset.type === 'shortcut') {
+                shortcuts[btn.dataset.category].splice(btn.dataset.index, 1);
+                saveData('shortcuts_v4', shortcuts);
                 renderShortcuts();
-            } else if (type === 'subscription') {
-                subscriptions.splice(index, 1);
-                saveData('subscriptions_v3', subscriptions);
+            } else if (btn.dataset.type === 'subscription') {
+                subscriptions.splice(btn.dataset.index, 1);
+                saveData('subscriptions_v4', subscriptions);
                 renderSubscriptionsAndTotals();
             }
         }
@@ -181,14 +182,15 @@ document.addEventListener('DOMContentLoaded', () => {
         if (type === 'shortcut') {
             const category = document.getElementById('edit-category').value;
             shortcuts[category][index] = { name: document.getElementById('edit-shortcut-name').value, url: document.getElementById('edit-shortcut-url').value };
-            saveData('shortcuts_v3', shortcuts);
+            saveData('shortcuts_v4', shortcuts);
             renderShortcuts();
         } else if (type === 'subscription') {
             subscriptions[index] = {
                 name: document.getElementById('edit-service-name').value, cost: parseFloat(document.getElementById('edit-service-cost').value),
-                currency: document.getElementById('edit-service-currency').value, type: document.getElementById('edit-service-type').value
+                currency: document.getElementById('edit-service-currency').value, type: document.getElementById('edit-service-type').value,
+                date: document.getElementById('edit-service-date').value
             };
-            saveData('subscriptions_v3', subscriptions);
+            saveData('subscriptions_v4', subscriptions);
             renderSubscriptionsAndTotals();
         }
         modal.style.display = 'none';
