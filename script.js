@@ -1,6 +1,15 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // --- 바로 가기 데이터 ---
-    const shortcuts = [
+    // --- 바로 가기 관련 요소 ---
+    const shortcutForm = document.getElementById('shortcut-form');
+    const shortcutContainer = document.getElementById('shortcut-container');
+
+    // --- 구독 관리 관련 요소 ---
+    const subscriptionForm = document.getElementById('subscription-form');
+    const subscriptionList = document.getElementById('subscription-list');
+
+    // --- 데이터 로드 (localStorage) ---
+    // 처음 방문 시 기본 목록을 제공하고, 그 이후에는 저장된 목록을 불러옵니다.
+    const initialShortcuts = [
         { name: 'ChatGPT', url: 'https://chat.openai.com/' },
         { name: 'Gemini', url: 'https://gemini.google.com/' },
         { name: 'Manus', url: 'https://manus.io/' },
@@ -8,26 +17,28 @@ document.addEventListener('DOMContentLoaded', () => {
         { name: 'Higgsfield', url: 'https://www.higgsfield.io/' },
         { name: 'Suno', url: 'https://suno.ai/' },
         { name: 'Minimax', url: 'https://api.minimax.chat/' },
-        { name: '어도비 스톡(구매)', url: 'https://stock.adobe.com/kr' },
-        { name: '어도비 스톡(판매)', url: 'https://contributor.stock.adobe.com/kr' },
-        { name: '모션 엘리먼츠(구매)', url: 'https://www.motionelements.com/ko/' },
-        { name: '모션 엘리먼츠(작가)', url: 'https://www.motionelements.com/ko/contributors' },
-        { name: '크라우드픽(구매)', url: 'https://www.crowdpic.net/' },
-        { name: '크라우드픽(작가)', url: 'https://www.crowdpic.net/apply' }
+        { name: '어도비스톡(구매)', url: 'https://stock.adobe.com/kr' },
+        { name: '모션엘리먼츠', url: 'https://www.motionelements.com/ko/' },
+        { name: '크라우드픽', url: 'https://www.crowdpic.net/' },
     ];
 
-    // --- 구독 관리 데이터 및 기능 ---
-    const subscriptionForm = document.getElementById('subscription-form');
-    const subscriptionList = document.getElementById('subscription-list');
+    let shortcuts = JSON.parse(localStorage.getItem('shortcuts')) || initialShortcuts;
     let subscriptions = JSON.parse(localStorage.getItem('subscriptions')) || [];
 
-    // 바로 가기 아이콘 렌더링
+    // --- 함수 정의 ---
+
+    // 데이터를 localStorage에 저장하는 함수
+    function saveData(key, data) {
+        localStorage.setItem(key, JSON.stringify(data));
+    }
+
+    // 바로 가기 목록을 화면에 그리는 함수
     function renderShortcuts() {
-        const container = document.getElementById('shortcut-container');
-        container.innerHTML = '';
-        shortcuts.forEach(item => {
+        shortcutContainer.innerHTML = '';
+        shortcuts.forEach((item, index) => {
             const domain = new URL(item.url).hostname;
             const iconUrl = `https://www.google.com/s2/favicons?domain=${domain}&sz=64`;
+            
             const shortcutElement = document.createElement('a');
             shortcutElement.href = item.url;
             shortcutElement.target = '_blank';
@@ -35,12 +46,13 @@ document.addEventListener('DOMContentLoaded', () => {
             shortcutElement.innerHTML = `
                 <img src="${iconUrl}" alt="${item.name} 아이콘">
                 <span>${item.name}</span>
+                <button class="item-delete-btn" data-index="${index}" title="삭제">X</button>
             `;
-            container.appendChild(shortcutElement);
+            shortcutContainer.appendChild(shortcutElement);
         });
     }
 
-    // 구독 목록 렌더링
+    // 구독 목록을 화면에 그리는 함수
     function renderSubscriptions() {
         subscriptionList.innerHTML = '';
         subscriptions.forEach((sub, index) => {
@@ -55,12 +67,34 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // 로컬 스토리지에 구독 목록 저장
-    function saveSubscriptions() {
-        localStorage.setItem('subscriptions', JSON.stringify(subscriptions));
-    }
+    // --- 이벤트 리스너 설정 ---
 
-    // 구독 추가 이벤트 처리
+    // 바로 가기 추가 이벤트
+    shortcutForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const newShortcut = {
+            name: document.getElementById('shortcut-name').value,
+            url: document.getElementById('shortcut-url').value
+        };
+        shortcuts.push(newShortcut);
+        saveData('shortcuts', shortcuts);
+        renderShortcuts();
+        shortcutForm.reset();
+    });
+
+    // 바로 가기 삭제 이벤트 (이벤트 위임)
+    shortcutContainer.addEventListener('click', (e) => {
+        // a 태그 링크 이동 방지
+        if (e.target.classList.contains('item-delete-btn')) {
+            e.preventDefault(); 
+            const index = e.target.getAttribute('data-index');
+            shortcuts.splice(index, 1);
+            saveData('shortcuts', shortcuts);
+            renderShortcuts();
+        }
+    });
+
+    // 구독 추가 이벤트
     subscriptionForm.addEventListener('submit', (e) => {
         e.preventDefault();
         const newSubscription = {
@@ -69,22 +103,22 @@ document.addEventListener('DOMContentLoaded', () => {
             date: document.getElementById('payment-date').value
         };
         subscriptions.push(newSubscription);
-        saveSubscriptions();
+        saveData('subscriptions', subscriptions);
         renderSubscriptions();
         subscriptionForm.reset();
     });
 
-    // 구독 삭제 이벤트 처리 (이벤트 위임)
+    // 구독 삭제 이벤트 (이벤트 위임)
     subscriptionList.addEventListener('click', (e) => {
         if (e.target.classList.contains('delete-btn')) {
             const index = e.target.getAttribute('data-index');
             subscriptions.splice(index, 1);
-            saveSubscriptions();
+            saveData('subscriptions', subscriptions);
             renderSubscriptions();
         }
     });
 
-    // 초기 렌더링
+    // --- 초기 렌더링 ---
     renderShortcuts();
     renderSubscriptions();
 });
