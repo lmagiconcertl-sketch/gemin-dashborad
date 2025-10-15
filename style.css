@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap');
 
 :root {
     --bg-color: #f0f2f5;
@@ -7,7 +7,7 @@
     --primary-color: #007bff;
     --danger-color: #dc3545;
     --border-color: #e0e0e0;
-    --shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    --shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
 }
 
 body {
@@ -19,21 +19,27 @@ body {
     line-height: 1.6;
 }
 
-.container {
-    max-width: 900px;
-    margin: 0 auto;
-}
+.container { max-width: 900px; margin: 0 auto; }
+header { text-align: center; margin-bottom: 30px; }
+header h1 { font-size: 2.5em; color: var(--text-color); }
 
-header {
-    text-align: center;
-    margin-bottom: 30px;
+/* 탭 스타일 */
+.tab-buttons { border-bottom: 2px solid var(--border-color); margin-bottom: 20px; }
+.tab-btn {
+    padding: 10px 20px;
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+    font-size: 1.1em;
+    font-weight: 500;
+    border-bottom: 3px solid transparent;
+    margin-bottom: -2px;
 }
+.tab-btn.active { color: var(--primary-color); border-bottom-color: var(--primary-color); }
+.tab-content { display: none; }
+.tab-content.active { display: block; }
 
-header h1 {
-    font-size: 2.5em;
-    color: var(--text-color);
-}
-
+/* 공통 카드 & 폼 스타일 */
 .card {
     background-color: var(--card-bg);
     border-radius: 12px;
@@ -41,147 +47,76 @@ header h1 {
     margin-bottom: 25px;
     box-shadow: var(--shadow);
 }
-
-h2 {
-    margin-top: 0;
-    border-bottom: 2px solid var(--border-color);
-    padding-bottom: 10px;
-    margin-bottom: 20px;
-    color: var(--primary-color);
+h2, h3 { margin-top: 0; color: var(--primary-color); }
+h3 {
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 8px;
+    margin-bottom: 15px;
+    font-size: 1.2em;
 }
-
-/* 폼 공통 스타일 */
-form {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 20px;
-    flex-wrap: wrap;
-}
-
-form input {
-    flex: 1;
-    min-width: 150px;
+form { display: flex; gap: 10px; flex-wrap: wrap; }
+form input, form select {
+    flex-grow: 1;
+    min-width: 120px;
     padding: 10px;
     border: 1px solid var(--border-color);
     border-radius: 6px;
     font-size: 1em;
+    font-family: inherit;
 }
-
 form button {
-    padding: 10px 20px;
-    border: none;
-    background-color: var(--primary-color);
-    color: white;
-    border-radius: 6px;
-    cursor: pointer;
-    font-weight: bold;
-    transition: background-color 0.2s;
+    padding: 10px 20px; border: none; background-color: var(--primary-color); color: white;
+    border-radius: 6px; cursor: pointer; font-weight: bold; transition: background-color 0.2s;
 }
+form button:hover { background-color: #0056b3; }
 
-form button:hover {
-    background-color: #0056b3;
-}
-
-
-/* 바로 가기 섹션 */
+/* 자주 가는 사이트 */
+.shortcut-category { margin-bottom: 20px; }
 .shortcut-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-    gap: 20px;
-    margin-top: 20px;
+    gap: 15px;
 }
-
 .shortcut-item {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-decoration: none;
-    color: var(--text-color);
-    padding: 15px 10px;
-    border-radius: 8px;
-    background-color: #f8f9fa;
-    border: 1px solid var(--border-color);
-    text-align: center;
-    transition: transform 0.2s;
+    position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center;
+    text-decoration: none; color: var(--text-color); padding: 15px 10px; border-radius: 8px;
+    background-color: #f8f9fa; border: 1px solid var(--border-color); text-align: center; transition: transform 0.2s;
 }
-
-.shortcut-item:hover {
-    transform: translateY(-5px);
-}
-
-.shortcut-item img {
-    width: 48px;
-    height: 48px;
-    margin-bottom: 10px;
-}
-
-.shortcut-item span {
-    font-size: 0.9em;
-    font-weight: 500;
-    word-break: break-all;
-}
-
+.shortcut-item:hover { transform: translateY(-5px); }
+.shortcut-item img { width: 40px; height: 40px; margin-bottom: 10px; }
+.shortcut-item span { font-size: 0.9em; font-weight: 500; word-break: break-all; }
 .item-delete-btn {
-    position: absolute;
-    top: -5px;
-    right: -5px;
-    width: 22px;
-    height: 22px;
-    background-color: var(--danger-color);
-    color: white;
-    border: none;
-    border-radius: 50%;
-    cursor: pointer;
-    font-weight: bold;
-    line-height: 22px;
+    position: absolute; top: -5px; right: -5px; width: 22px; height: 22px; background-color: var(--danger-color);
+    color: white; border: none; border-radius: 50%; cursor: pointer; font-weight: bold; line-height: 22px;
+    text-align: center; opacity: 0; transition: opacity 0.2s; font-size: 14px;
+}
+.shortcut-item:hover .item-delete-btn { opacity: 1; }
+
+/* 구독 관리 */
+#subscription-totals {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px 25px;
     text-align: center;
-    opacity: 0;
-    transition: opacity 0.2s;
-    font-size: 14px;
 }
-
-.shortcut-item:hover .item-delete-btn {
-    opacity: 1;
-}
-
-
-/* 구독 관리 섹션 */
-.table-container {
-    overflow-x: auto;
-}
-
-table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-th, td {
-    padding: 12px;
-    text-align: left;
-    border-bottom: 1px solid var(--border-color);
-}
-
-th {
+.total-box {
     background-color: #f8f9fa;
+    padding: 15px;
+    border-radius: 8px;
 }
+.total-box h4 { margin: 0 0 5px 0; color: #555; }
+.total-box .price-krw { font-size: 1.3em; font-weight: 700; color: var(--primary-color); }
+.total-box .price-usd { font-size: 1em; color: #6c757d; }
 
+.table-container { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; }
+th, td { padding: 12px; text-align: left; border-bottom: 1px solid var(--border-color); }
+th { background-color: #f8f9fa; font-weight: 500; }
+td span { display: block; font-size: 0.9em; color: #6c757d; }
 .delete-btn {
-    background-color: var(--danger-color);
-    color: white;
-    border: none;
-    padding: 5px 10px;
-    border-radius: 4px;
-    cursor: pointer;
+    background-color: var(--danger-color); color: white; border: none;
+    padding: 5px 10px; border-radius: 4px; cursor: pointer;
 }
+.delete-btn:hover { background-color: #c82333; }
 
-.delete-btn:hover {
-    background-color: #c82333;
-}
-
-footer {
-    text-align: center;
-    margin-top: 40px;
-    color: #888;
-}
+footer { text-align: center; margin-top: 40px; color: #888; }
