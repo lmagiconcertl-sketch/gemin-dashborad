@@ -42,7 +42,7 @@
                 <div class="card">
                     <form id="subscription-form">
                         <input type="text" id="service-name" placeholder="서비스 이름" required>
-                        <input type="number" id="service-cost" placeholder="구독료 (숫자만)" step="any" required>
+                        <input type="number" id="service-cost" placeholder="구독료" step="any" required>
                         <select id="service-currency">
                             <option value="KRW">KRW (₩)</option>
                             <option value="USD">USD ($)</option>
@@ -51,6 +51,7 @@
                             <option value="monthly">월간</option>
                             <option value="yearly">연간</option>
                         </select>
+                        <input type="date" id="service-date" title="마지막 결제일 또는 시작일" required>
                         <button type="submit">구독 추가하기</button>
                     </form>
                 </div>
@@ -62,9 +63,8 @@
                             <thead>
                                 <tr>
                                     <th>서비스 이름</th>
-                                    <th>구분</th>
                                     <th>구독료 (월)</th>
-                                    <th>구독료 (년)</th>
+                                    <th>다음 갱신일</th>
                                     <th>관리</th>
                                 </tr>
                             </thead>
