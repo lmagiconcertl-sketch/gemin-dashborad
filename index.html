@@ -25,7 +25,8 @@
                     <form id="shortcut-form">
                         <input type="text" id="shortcut-name" placeholder="사이트 이름" required>
                         <input type="url" id="shortcut-url" placeholder="사이트 주소 (https://...)" required>
-                        <select id="shortcut-category">
+                        <select id="shortcut-category" required>
+                            <option value="" disabled selected>-- 카테고리 선택 --</option>
                             <option value="conversationalAI">대화형 AI</option>
                             <option value="generativeAI">생성형 AI</option>
                             <option value="otherSites">그 외 사이트</option>
@@ -53,10 +54,8 @@
                         <button type="submit">구독 추가하기</button>
                     </form>
                 </div>
-                <div class="card">
-                    <div id="subscription-totals">
-                        </div>
-                </div>
+                <div class="card" id="subscription-totals">
+                    </div>
                 <div class="card">
                     <div class="table-container">
                         <table>
@@ -76,11 +75,16 @@
                 </div>
             </div>
         </div>
-
-        <footer>
-            <p>My Personal AI Dashboard</p>
-        </footer>
     </div>
+
+    <div id="edit-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h2>항목 수정</h2>
+            <form id="edit-form"></form>
+        </div>
+    </div>
+
     <script src="script.js"></script>
 </body>
 </html>
