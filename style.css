@@ -2,7 +2,7 @@
 
 :root {
     --bg-color: #f0f2f5; --card-bg: #ffffff; --text-color: #333333;
-    --primary-color: #007bff; --danger-color: #dc3545; --edit-color: #28a745;
+    --primary-color: #007bff; --danger-color: #dc3545; --edit-color: #28a745; --warning-color: #ffc107;
     --border-color: #e0e0e0; --shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
 }
 body {
@@ -13,15 +13,15 @@ body {
 header { text-align: center; margin-bottom: 30px; }
 header h1 { font-size: 2.5em; color: var(--text-color); }
 
-/* 탭 스타일 (작동하도록 수정) */
+/* 탭 스타일 */
 .tab-buttons { border-bottom: 2px solid var(--border-color); margin-bottom: 20px; }
 .tab-btn {
     padding: 10px 20px; border: none; background-color: transparent; cursor: pointer;
     font-size: 1.1em; font-weight: 500; border-bottom: 3px solid transparent; margin-bottom: -2px;
 }
 .tab-btn.active { color: var(--primary-color); border-bottom-color: var(--primary-color); }
-.tab-content { display: none; } /* 기본적으로 숨김 */
-.tab-content.active { display: block; } /* 활성화된 탭만 표시 */
+.tab-content { display: none; }
+.tab-content.active { display: block; }
 
 /* 공통 카드 & 폼 */
 .card {
@@ -33,18 +33,19 @@ h3 {
     border-bottom: 1px solid var(--border-color); padding-bottom: 8px;
     margin-bottom: 15px; font-size: 1.2em;
 }
-form { display: flex; gap: 10px; flex-wrap: wrap; }
+form { display: flex; gap: 10px; flex-wrap: wrap; align-items: center;}
 form input, form select {
     flex-grow: 1; min-width: 120px; padding: 10px; border: 1px solid var(--border-color);
     border-radius: 6px; font-size: 1em; font-family: inherit;
 }
+input[type="date"] { flex-grow: 1.5; }
 form button {
     padding: 10px 20px; border: none; background-color: var(--primary-color); color: white;
     border-radius: 6px; cursor: pointer; font-weight: bold; transition: background-color 0.2s;
 }
 form button:hover { background-color: #0056b3; }
 
-/* 자주 가는 사이트 (그룹화된 그리드 레이아웃 수정) */
+/* 자주 가는 사이트 */
 .shortcut-category { margin-bottom: 20px; }
 .shortcut-grid {
     display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 15px;
@@ -56,6 +57,7 @@ form button:hover { background-color: #0056b3; }
     transition: transform 0.2s, box-shadow 0.2s; height: 110px;
 }
 .shortcut-item:hover { transform: translateY(-5px); box-shadow: var(--shadow); }
+.shortcut-item a { text-decoration: none; color: inherit; display: contents; }
 .shortcut-item img { width: 40px; height: 40px; margin-bottom: 10px; }
 .shortcut-item span { font-size: 0.9em; font-weight: 500; word-break: break-all; }
 .item-actions {
@@ -80,9 +82,10 @@ form button:hover { background-color: #0056b3; }
 .total-box .price-usd { font-size: 1em; color: #6c757d; }
 .table-container { overflow-x: auto; }
 table { width: 100%; border-collapse: collapse; }
-th, td { padding: 12px; text-align: left; border-bottom: 1px solid var(--border-color); }
+th, td { padding: 12px; text-align: left; border-bottom: 1px solid var(--border-color); vertical-align: middle; }
 th { background-color: #f8f9fa; font-weight: 500; }
 td span { display: block; font-size: 0.9em; color: #6c757d; }
+.renewal-imminent { color: var(--danger-color); font-weight: 700; } /* 갱신 임박 스타일 */
 td .actions { display: flex; gap: 8px; }
 td .delete-btn, td .edit-btn {
     border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; color: white;
@@ -94,7 +97,7 @@ td .delete-btn, td .edit-btn {
     width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.5);
 }
 .modal-content {
-    background-color: #fefefe; margin: 15% auto; padding: 25px;
+    background-color: #fefefe; margin: 10% auto; padding: 25px;
     border: 1px solid #888; width: 80%; max-width: 500px; border-radius: 12px;
 }
 .close-btn { color: #aaa; float: right; font-size: 28px; font-weight: bold; cursor: pointer; }
