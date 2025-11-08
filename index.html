@@ -14,6 +14,22 @@
             <p>자주 사용하는 AI 서비스와 구독 정보를 관리하세요.</p>
         </header>
 
+
+<!-- 저장 컨트롤 -->
+<div id="storage-controls" style="display:flex;gap:8px;align-items:center;margin:12px 0;">
+  <button id="pick-file">파일 연결(처음 1회)</button>
+  <button id="open-file">열기</button>
+  <button id="save-now">지금 저장</button>
+  <button id="export-data">내보내기</button>
+  <label style="display:inline-flex;gap:6px;align-items:center;">
+    <span>가져오기</span>
+    <input id="import-data" type="file" accept="application/json">
+  </label>
+  <small id="storage-status" style="margin-left:8px;opacity:.7;"></small>
+</div>
+
+
+        
         <div class="tabs">
             <div class="tab-buttons">
                 <button class="tab-btn active" data-tab="sites">자주 가는 사이트</button>
@@ -86,5 +102,20 @@
     </div>
 
     <script src="script.js"></script>
+
+<script src="./app-storage.js"></script>
+<script>
+  // (임시) 렌더 함수가 없다면 콘솔로만 확인
+  window.renderSites = window.renderSites || function(state){ console.log('render', state); };
+
+  // 사이트 추가할 때 호출할 헬퍼
+  window.addSiteToState = function(site){
+    window.__STATE__.sites.push(site);
+    window.__saveState__();                 // 파일/로컬 모두 저장
+    window.renderSites(window.__STATE__);   // 화면 갱신
+  };
+</script>
+
+
 </body>
 </html>
