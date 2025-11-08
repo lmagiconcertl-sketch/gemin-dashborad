@@ -5,92 +5,53 @@
   <title>AI Dashboard (Private)</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
-* { box-sizing: border-box; }
-body { margin: 0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, Apple SD Gothic Neo, Noto Sans KR, sans-serif; background:#0b0d12; color:#e9edf3; }
-a { color: #8ab4ff; text-decoration: none; }
-.topbar { display:flex; align-items:center; justify-content:space-between; padding:12px 16px; border-bottom:1px solid #1b2130; position:sticky; top:0; background:#0b0d12; z-index:10; }
-.topbar h1 { font-size:18px; margin:0; }
-.controls { display:flex; gap:8px; align-items:center; }
-.controls button, .controls .import-label { background:#141a24; color:#e9edf3; border:1px solid #222a3b; padding:6px 10px; border-radius:10px; font-size:12px; }
-.import-label input { display:none; }
-.status { opacity:.8; margin-left:8px; }
-
-.tabs { display:flex; gap:8px; padding:10px 16px; border-bottom:1px solid #1b2130; }
-.tab-btn { background:#111622; border:1px solid #1c2435; color:#cfe1ff; padding:8px 12px; border-radius:10px; cursor:pointer; }
-.tab-btn.active { background:#1a2233; border-color:#2b3b5d; }
-
-main { padding:16px; max-width:1100px; margin:0 auto; }
-.card { background:#0f1420; border:1px solid #1b2130; border-radius:16px; padding:16px; margin-bottom:16px; }
-.form .row { display:flex; gap:12px; align-items:center; margin:10px 0; }
-.form label { width:120px; color:#a7b4cc; }
-.form input, .form select { flex:1; padding:8px; border:1px solid #202a40; border-radius:10px; background:#0b0f19; color:#e9edf3; }
-
-.table { width:100%; border-collapse: collapse; }
-.table th, .table td { border-top:1px solid #1b2130; padding:10px; vertical-align: top; }
-.table th { color:#9fb2d9; text-align:left; }
-
-.site-grid { display:grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap:12px; }
-.site-card { background:#0b0f19; border:1px solid #1b2130; border-radius:14px; padding:12px; display:flex; align-items:center; gap:10px; }
-.site-card img { width:18px; height:18px; border-radius:4px; }
-.site-card .meta { flex:1; min-width:0; }
-.site-card .meta .name { font-weight:600; color:#eaf1ff; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-.site-card .meta .url { font-size:12px; color:#9bb0d4; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-.site-card .actions { display:flex; gap:6px; }
-.site-card .actions button { background:#151b28; border:1px solid #212a3d; color:#cfe1ff; padding:6px 8px; border-radius:8px; font-size:12px; }
-
-.category-title { color:#9fb2d9; margin:18px 6px 8px; font-size:14px; }
-
-.totals { display:grid; grid-template-columns: repeat(auto-fit, minmax(220px,1fr)); gap:12px; }
-.total-box { background:#0f1420; border:1px solid #1b2130; border-radius:12px; padding:12px; }
-.total-box h4 { margin:0 0 8px; color:#aecdff; }
-.price-krw { font-size:20px; font-weight:700; }
-.price-usd { color:#a7b4cc; }
-
-.renew { font-size:12px; color:#a7b4cc; }
-.renew.badge { color:#ffe27a; }
-
-.tab-content { display:none; }
-.tab-content.active { display:block; }
-
-.modal { position:fixed; inset:0; background:rgba(0,0,0,.4); display:none; align-items:center; justify-content:center; }
-.modal .modal-inner { width:min(520px, 92vw); }
-.modal .modal-actions { display:flex; justify-content:flex-end; gap:10px; margin-top:12px; }
-.modal button { background:#141a24; color:#e9edf3; border:1px solid #222a3b; padding:6px 10px; border-radius:10px; font-size:12px; }
+*{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,Apple SD Gothic Neo,Noto Sans KR,sans-serif;background:#0b0d12;color:#e9edf3}
+a{color:#8ab4ff;text-decoration:none}.topbar{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid #1b2130;position:sticky;top:0;background:#0b0d12;z-index:10}
+.topbar h1{font-size:18px;margin:0}.controls{display:flex;gap:8px;align-items:center}
+.controls button,.controls .import-label{background:#141a24;color:#e9edf3;border:1px solid #222a3b;padding:6px 10px;border-radius:10px;font-size:12px}.import-label input{display:none}.status{opacity:.8;margin-left:8px}
+.tabs{display:flex;gap:8px;padding:10px 16px;border-bottom:1px solid #1b2130}.tab-btn{background:#111622;border:1px solid #1c2435;color:#cfe1ff;padding:8px 12px;border-radius:10px;cursor:pointer}
+.tab-btn.active{background:#1a2233;border-color:#2b3b5d}main{padding:16px;max-width:1100px;margin:0 auto}
+.card{background:#0f1420;border:1px solid #1b2130;border-radius:16px;padding:16px;margin-bottom:16px}.form .row{display:flex;gap:12px;align-items:center;margin:10px 0}
+.form label{width:120px;color:#a7b4cc}.form input,.form select{flex:1;padding:8px;border:1px solid #202a40;border-radius:10px;background:#0b0f19;color:#e9edf3}
+.table{width:100%;border-collapse:collapse}.table th,.table td{border-top:1px solid #1b2130;padding:10px;vertical-align:top}.table th{color:#9fb2d9;text-align:left}
+.site-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}.site-card{background:#0b0f19;border:1px solid #1b2130;border-radius:14px;padding:12px;display:flex;align-items:center;gap:10px}
+.site-card img{width:18px;height:18px;border-radius:4px}.site-card .meta{flex:1;min-width:0}.site-card .meta .name{font-weight:600;color:#eaf1ff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.site-card .meta .url{font-size:12px;color:#9bb0d4;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.site-card .actions{display:flex;gap:6px}
+.site-card .actions button{background:#151b28;border:1px solid #212a3d;color:#cfe1ff;padding:6px 8px;border-radius:8px;font-size:12px}
+.category-title{color:#9fb2d9;margin:18px 6px 8px;font-size:14px}
+.totals{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}.total-box{background:#0f1420;border:1px solid #1b2130;border-radius:12px;padding:12px}
+.total-box h4{margin:0 0 8px;color:#aecdff}.price-krw{font-size:20px;font-weight:700}.price-usd{color:#a7b4cc}
+.renew{font-size:12px;color:#a7b4cc}.renew.badge{color:#ffe27a}.tab-content{display:none}.tab-content.active{display:block}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.4);display:none;align-items:center;justify-content:center}.modal .modal-inner{width:min(520px,92vw)}
+.modal .modal-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:12px}.modal button{background:#141a24;color:#e9edf3;border:1px solid #222a3b;padding:6px 10px;border-radius:10px;font-size:12px}
   </style>
 </head>
 <body>
   <header class="topbar">
     <h1>AI Dashboard</h1>
     <div class="controls">
-      <button id="btn-connect">파일 연결(처음 1회)</button>
-      <button id="btn-open">열기</button>
-      <button id="btn-save">지금 저장</button>
-      <button id="btn-export">내보내기</button>
-      <label class="import-label">
-        가져오기 <input id="file-import" type="file" accept="application/json" />
+      <button id="btn-connect" type="button">파일 연결(처음 1회)</button>
+      <button id="btn-open"    type="button">열기</button>
+      <button id="btn-save"    type="button">지금 저장</button>
+      <button id="btn-export"  type="button">내보내기</button>
+      <label class="import-label">가져오기
+        <input id="file-import" type="file" accept="application/json" />
       </label>
       <small id="status" class="status"></small>
     </div>
   </header>
 
   <nav class="tabs">
-    <button class="tab-btn active" data-tab="tab-sites">자주 가는 사이트</button>
-    <button class="tab-btn" data-tab="tab-subs">AI 구독 관리</button>
+    <button class="tab-btn active" data-tab="tab-sites" type="button">자주 가는 사이트</button>
+    <button class="tab-btn" data-tab="tab-subs" type="button">AI 구독 관리</button>
   </nav>
 
   <main>
-    <!-- SITES -->
     <section id="tab-sites" class="tab-content active">
       <form id="form-site" class="card form">
         <h2>사이트 추가</h2>
-        <div class="row">
-          <label>이름</label>
-          <input id="site-name" placeholder="예: ChatGPT" required />
-        </div>
-        <div class="row">
-          <label>주소(URL)</label>
-          <input id="site-url" type="url" placeholder="https://..." required />
-        </div>
+        <div class="row"><label>이름</label><input id="site-name" placeholder="예: ChatGPT" required /></div>
+        <div class="row"><label>주소(URL)</label><input id="site-url" type="url" placeholder="https://..." required /></div>
         <div class="row">
           <label>카테고리</label>
           <select id="site-cat" required>
@@ -101,58 +62,31 @@ main { padding:16px; max-width:1100px; margin:0 auto; }
         </div>
         <button type="submit">추가</button>
       </form>
-
       <div id="site-list"></div>
     </section>
 
-    <!-- SUBSCRIPTIONS -->
     <section id="tab-subs" class="tab-content">
       <form id="form-sub" class="card form">
         <h2>구독 추가</h2>
-        <div class="row">
-          <label>서비스 이름</label>
-          <input id="sub-name" placeholder="예: Suno" required />
+        <div class="row"><label>서비스 이름</label><input id="sub-name" placeholder="예: Suno" required /></div>
+        <div class="row"><label>구독료</label><input id="sub-cost" type="number" min="0" step="any" placeholder="금액" required /></div>
+        <div class="row"><label>통화</label>
+          <select id="sub-currency"><option value="KRW">KRW (₩)</option><option value="USD">USD ($)</option></select>
         </div>
-        <div class="row">
-          <label>구독료</label>
-          <input id="sub-cost" type="number" min="0" step="any" placeholder="금액" required />
+        <div class="row"><label>구분</label>
+          <select id="sub-type"><option value="monthly">월간</option><option value="yearly">연간</option></select>
         </div>
-        <div class="row">
-          <label>통화</label>
-          <select id="sub-currency">
-            <option value="KRW">KRW (₩)</option>
-            <option value="USD">USD ($)</option>
-          </select>
-        </div>
-        <div class="row">
-          <label>구분</label>
-          <select id="sub-type">
-            <option value="monthly">월간</option>
-            <option value="yearly">연간</option>
-          </select>
-        </div>
-        <div class="row">
-          <label>마지막 결제일</label>
-          <input id="sub-date" type="date" required />
-        </div>
+        <div class="row"><label>마지막 결제일</label><input id="sub-date" type="date" required /></div>
         <button type="submit">추가</button>
       </form>
 
       <div class="card">
         <h2>내 구독</h2>
         <table class="table">
-          <thead>
-            <tr>
-              <th>서비스</th>
-              <th>월 환산</th>
-              <th>다음 갱신일</th>
-              <th></th>
-            </tr>
-          </thead>
+          <thead><tr><th>서비스</th><th>월 환산</th><th>다음 갱신일</th><th></th></tr></thead>
           <tbody id="sub-list"></tbody>
         </table>
       </div>
-
       <div id="sub-totals" class="totals"></div>
     </section>
   </main>
@@ -162,70 +96,69 @@ main { padding:16px; max-width:1100px; margin:0 auto; }
       <h3 id="modal-title">편집</h3>
       <div id="modal-body"></div>
       <div class="modal-actions">
-        <button id="modal-cancel">취소</button>
-        <button id="modal-save">저장</button>
+        <button id="modal-cancel" type="button">취소</button>
+        <button id="modal-save"   type="button">저장</button>
       </div>
     </div>
   </div>
 
   <script>
-  // === storage.js (inline) ===
+  // storage (inline)
   (() => {
     const statusEl = () => document.getElementById('status');
-    const DB = 'ai-dash-db'; const STORE = 'handles';
-    function openDB() { return new Promise((res, rej) => { const r = indexedDB.open(DB,1); r.onupgradeneeded=e=>e.target.result.createObjectStore(STORE); r.onsuccess=e=>res(e.target.result); r.onerror=()=>rej(r.error); }); }
-    async function putHandle(h){ const db=await openDB(); return new Promise((res,rej)=>{ const tx=db.transaction(STORE,'readwrite'); tx.objectStore(STORE).put(h,'main'); tx.oncomplete=res; tx.onerror=()=>rej(tx.error); });}
-    async function getHandle(){ const db=await openDB(); return new Promise((res,rej)=>{ const tx=db.transaction(STORE,'readonly'); const rq=tx.objectStore(STORE).get('main'); rq.onsuccess=()=>res(rq.result||null); rq.onerror=()=>rej(rq.error); });}
+    const DB='ai-dash-db', STORE='handles';
+    function openDB(){return new Promise((res,rej)=>{const r=indexedDB.open(DB,1);r.onupgradeneeded=e=>e.target.result.createObjectStore(STORE);r.onsuccess=e=>res(e.target.result);r.onerror=()=>rej(r.error);});}
+    async function putHandle(h){const db=await openDB();return new Promise((res,rej)=>{const tx=db.transaction(STORE,'readwrite');tx.objectStore(STORE).put(h,'main');tx.oncomplete=res;tx.onerror=()=>rej(tx.error);});}
+    async function getHandle(){const db=await openDB();return new Promise((res,rej)=>{const tx=db.transaction(STORE,'readonly');const rq=tx.objectStore(STORE).get('main');rq.onsuccess=()=>res(rq.result||null);rq.onerror=()=>rej(rq.error);});}
 
     const LS_KEY='ai-dash-backup';
     const storage={
-      _handle:null,
-      _state:{sites:[],subscriptions:[]},
-      _listeners:new Set(),
+      _handle:null,_state:{sites:[],subscriptions:[]},_listeners:new Set(),
       getState(){return this._state;},
-      setState(n){ this._state=n; try{localStorage.setItem(LS_KEY,JSON.stringify(n))}catch{}; this._listeners.forEach(f=>f(this._state)); },
-      onChange(f){ this._listeners.add(f); return ()=>this._listeners.delete(f); },
-      async _ensurePermission(){ if(!this._handle) return false; let p=await this._handle.queryPermission({mode:'readwrite'}); if(p!=='granted') p=await this._handle.requestPermission({mode:'readwrite'}); return p==='granted'; },
+      setState(n){this._state=n;try{localStorage.setItem(LS_KEY,JSON.stringify(n))}catch{};this._listeners.forEach(f=>f(this._state));},
+      onChange(f){this._listeners.add(f);return()=>this._listeners.delete(f);},
+      async _ensurePermission(){if(!this._handle) return false; let p=await this._handle.queryPermission({mode:'readwrite'}); if(p!=='granted') p=await this._handle.requestPermission({mode:'readwrite'}); return p==='granted';},
       async save(){
-        if(!this._handle){ statusEl()?.textContent='파일 미연결(로컬 백업만 저장됨)'; return; }
-        const ok=await this._ensurePermission(); if(!ok){ statusEl()?.textContent='저장 실패(권한 거부)'; return; }
-        try{ const w=await this._handle.createWritable(); await w.write(new Blob([JSON.stringify(this._state,null,2)],{type:'application/json'})); await w.close(); statusEl()?.textContent='저장 완료'; }
-        catch(e){ console.error('save error',e); alert('저장 오류: 다운로드/문서 폴더로 다시 시도해주세요.'); statusEl()?.textContent='저장 실패'; }
+        if(!this._handle){statusEl()&& (statusEl().textContent='파일 미연결(로컬 백업만 저장됨)'); return;}
+        const ok=await this._ensurePermission(); if(!ok){statusEl()&&(statusEl().textContent='저장 실패(권한 거부)'); return;}
+        try{const w=await this._handle.createWritable(); await w.write(new Blob([JSON.stringify(this._state,null,2)],{type:'application/json'})); await w.close(); statusEl()&&(statusEl().textContent='저장 완료');}
+        catch(e){console.error('save error',e); alert('저장 오류: 다운로드/문서 폴더로 다시 시도해주세요.'); statusEl()&&(statusEl().textContent='저장 실패');}
       },
       async connectNew(){
-        if(!('showSaveFilePicker' in window)){ alert('브라우저가 파일 저장을 지원하지 않아요.'); return; }
-        try{ const h=await window.showSaveFilePicker({suggestedName:'ai-dashboard.json',types:[{description:'JSON',accept:{'application/json':['.json']}}]}); this._handle=h; await putHandle(h); statusEl()?.textContent='파일 연결됨'; await this.save(); }
-        catch(e){ if(e?.name!=='AbortError'){ console.error('connectNew',e); alert('파일 생성 실패. 다운로드/문서 폴더로 다시 시도해주세요.'); } }
+        if(!('showSaveFilePicker' in window)){alert('브라우저가 파일 저장을 지원하지 않아요.'); return;}
+        try{const h=await window.showSaveFilePicker({suggestedName:'ai-dashboard.json',types:[{description:'JSON',accept:{'application/json':['.json']}}]}); this._handle=h; await putHandle(h); statusEl()&&(statusEl().textContent='파일 연결됨'); await this.save();}
+        catch(e){if(e&&e.name!=='AbortError'){console.error('connectNew',e); alert('파일 생성 실패. 다운로드/문서 폴더로 다시 시도해주세요.');}}
       },
       async openExisting(){
-        if(!('showOpenFilePicker' in window)){ alert('브라우저가 파일 열기를 지원하지 않아요.'); return; }
-        try{ const [h]=await window.showOpenFilePicker({types:[{description:'JSON',accept:{'application/json':['.json']}}]}); this._handle=h; await putHandle(h); const text=await (await h.getFile()).text(); const d=JSON.parse(text||'{}'); this._state={ sites:Array.isArray(d.sites)?d.sites:[], subscriptions:Array.isArray(d.subscriptions)?d.subscriptions:[] }; try{localStorage.setItem(LS_KEY,JSON.stringify(this._state))}catch{}; statusEl()?.textContent='파일 연결됨'; this._listeners.forEach(f=>f(this._state)); }
-        catch(e){ if(e?.name!=='AbortError'){ console.error('openExisting',e); alert('파일을 열 수 없어요.'); } }
+        if(!('showOpenFilePicker' in window)){alert('브라우저가 파일 열기를 지원하지 않아요.'); return;}
+        try{const picker=await window.showOpenFilePicker({types:[{description:'JSON',accept:{'application/json':['.json']}}]}); const h=picker && picker[0]; if(!h) return; this._handle=h; await putHandle(h);
+          const text=await (await h.getFile()).text(); const d=JSON.parse(text||'{}');
+          this._state={sites:Array.isArray(d.sites)?d.sites:[],subscriptions:Array.isArray(d.subscriptions)?d.subscriptions:[]};
+          try{localStorage.setItem(LS_KEY,JSON.stringify(this._state))}catch{}; statusEl()&&(statusEl().textContent='파일 연결됨'); this._listeners.forEach(f=>f(this._state));
+        }catch(e){if(e&&e.name!=='AbortError'){console.error('openExisting',e); alert('파일을 열 수 없어요.');}}
       },
-      exportJSON(){ const blob=new Blob([JSON.stringify(this._state,null,2)],{type:'application/json'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='ai-dashboard-backup.json'; a.click(); },
-      async importJSON(file){ const text=await file.text(); const d=JSON.parse(text||'{}'); this._state={ sites:Array.isArray(d.sites)?d.sites:[], subscriptions:Array.isArray(d.subscriptions)?d.subscriptions:[] }; try{localStorage.setItem(LS_KEY,JSON.stringify(this._state))}catch{}; this._listeners.forEach(f=>f(this._state)); statusEl()?.textContent='가져오기 완료'; await this.save(); },
+      exportJSON(){const blob=new Blob([JSON.stringify(this._state,null,2)],{type:'application/json'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='ai-dashboard-backup.json'; a.click();},
+      async importJSON(file){const text=await file.text(); const d=JSON.parse(text||'{}'); this._state={sites:Array.isArray(d.sites)?d.sites:[],subscriptions:Array.isArray(d.subscriptions)?d.subscriptions:[]}; try{localStorage.setItem(LS_KEY,JSON.stringify(this._state))}catch{}; this._listeners.forEach(f=>f(this._state)); statusEl()&&(statusEl().textContent='가져오기 완료'); await this.save();},
       async init(){
-        try{ const raw=localStorage.getItem(LS_KEY); if(raw) this._state=JSON.parse(raw); }catch{}; this._listeners.forEach(f=>f(this._state));
+        try{const raw=localStorage.getItem(LS_KEY); if(raw) this._state=JSON.parse(raw);}catch{}; this._listeners.forEach(f=>f(this._state));
         if('showOpenFilePicker' in window){
-          try{ const saved=await getHandle(); if(saved){ this._handle=saved; const ok=await this._ensurePermission(); if(ok){ const text=await (await this._handle.getFile()).text(); const d=JSON.parse(text||'{}'); this._state={ sites:Array.isArray(d.sites)?d.sites:[], subscriptions:Array.isArray(d.subscriptions)?d.subscriptions:[] }; try{localStorage.setItem(LS_KEY,JSON.stringify(this._state))}catch{}; statusEl()?.textContent='파일 자동 연결됨'; this._listeners.forEach(f=>f(this._state)); } else { statusEl()?.textContent='로컬 백업 로드됨(파일 미연결)'; } } else { statusEl()?.textContent='로컬 백업 로드됨(파일 미연결)'; } }
-          catch{ statusEl()?.textContent='로컬 백업 로드됨(파일 미연결)'; }
-        } else {
-          statusEl()?.textContent='파일 직접 저장 미지원(내보내기/가져오기 사용)';
-        }
+          try{const saved=await getHandle(); if(saved){this._handle=saved; const ok=await this._ensurePermission(); if(ok){const text=await (await this._handle.getFile()).text(); const d=JSON.parse(text||'{}'); this._state={sites:Array.isArray(d.sites)?d.sites:[],subscriptions:Array.isArray(d.subscriptions)?d.subscriptions:[]}; try{localStorage.setItem(LS_KEY,JSON.stringify(this._state))}catch{}; statusEl()&&(statusEl().textContent='파일 자동 연결됨'); this._listeners.forEach(f=>f(this._state));} else {statusEl()&&(statusEl().textContent='로컬 백업 로드됨(파일 미연결)');}} else {statusEl()&&(statusEl().textContent='로컬 백업 로드됨(파일 미연결)');}}
+          catch{statusEl()&&(statusEl().textContent='로컬 백업 로드됨(파일 미연결)');}
+        } else { statusEl()&&(statusEl().textContent='파일 직접 저장 미지원(내보내기/가져오기 사용)'); }
       }
     };
-    window.AppStorage = storage;
+    window.AppStorage=storage;
   })();
   </script>
 
   <script>
-  // === app.js (inline) ===
+  // app (inline)
   document.addEventListener('DOMContentLoaded', async () => {
-    const USD_TO_KRW = 1380;
+    const USD_TO_KRW=1380;
 
     // 탭
-    const tabs=document.querySelectorAll('.tab-btn'); const pages=document.querySelectorAll('.tab-content');
-    tabs.forEach(btn=>btn.addEventListener('click',()=>{ tabs.forEach(b=>b.classList.remove('active')); pages.forEach(p=>p.classList.remove('active')); btn.classList.add('active'); document.getElementById(btn.dataset.tab).classList.add('active'); }));
+    const tabs=document.querySelectorAll('.tab-btn'), pages=document.querySelectorAll('.tab-content');
+    tabs.forEach(btn=>btn.addEventListener('click',()=>{tabs.forEach(b=>b.classList.remove('active'));pages.forEach(p=>p.classList.remove('active'));btn.classList.add('active');document.getElementById(btn.dataset.tab).classList.add('active');}));
 
     // 파일 컨트롤
     const btnConnect=document.getElementById('btn-connect');
@@ -233,11 +166,12 @@ main { padding:16px; max-width:1100px; margin:0 auto; }
     const btnSave=document.getElementById('btn-save');
     const btnExport=document.getElementById('btn-export');
     const fileImport=document.getElementById('file-import');
-    btnConnect.addEventListener('click',()=>AppStorage.connectNew());
-    btnOpen.addEventListener('click',()=>AppStorage.openExisting());
-    btnSave.addEventListener('click',()=>AppStorage.save());
-    btnExport.addEventListener('click',()=>AppStorage.exportJSON());
-    fileImport.addEventListener('change',(e)=>{ const f=e.target.files?.[0]; if(!f) return; AppStorage.importJSON(f).finally(()=>{e.target.value='';}); });
+
+    btnConnect && btnConnect.addEventListener('click',()=>window.AppStorage && AppStorage.connectNew());
+    btnOpen    && btnOpen.addEventListener('click',()=>window.AppStorage && AppStorage.openExisting());
+    btnSave    && btnSave.addEventListener('click',()=>window.AppStorage && AppStorage.save());
+    btnExport  && btnExport.addEventListener('click',()=>window.AppStorage && AppStorage.exportJSON());
+    fileImport && fileImport.addEventListener('change',(e)=>{const files=e.target.files;const f=(files&&files[0])||null; if(!f) return; AppStorage.importJSON(f).finally(()=>{e.target.value='';});});
 
     // 요소
     const siteList=document.getElementById('site-list');
@@ -262,23 +196,23 @@ main { padding:16px; max-width:1100px; margin:0 auto; }
     const modalSave=document.getElementById('modal-save');
     let modalCtx=null;
 
-    modalCancel.addEventListener('click',()=>{ modal.style.display='none'; modalCtx=null; });
-    window.addEventListener('click',(e)=>{ if(e.target===modal){ modal.style.display='none'; modalCtx=null; } });
+    modalCancel && modalCancel.addEventListener('click',()=>{modal.style.display='none';modalCtx=null;});
+    window.addEventListener('click',(e)=>{if(e.target===modal){modal.style.display='none';modalCtx=null;}});
 
-    function fmtKRW(x){ return `₩${Math.round(x).toLocaleString('ko-KR')}`; }
-    function fmtUSD(x){ return `$${(+x).toFixed(2)}`; }
+    function fmtKRW(x){return `₩${Math.round(x).toLocaleString('ko-KR')}`;}
+    function fmtUSD(x){return `$${(+x).toFixed(2)}`;}
 
     function renderSites(state){
-      const groups={ conversationalAI:[], generativeAI:[], otherSites:[] };
-      (state.sites||[]).forEach((s,i)=>{ const cat=s.category||'otherSites'; groups[cat]=groups[cat]||[]; groups[cat].push({...s,_i:i}); });
+      const groups={conversationalAI:[],generativeAI:[],otherSites:[]};
+      (state.sites||[]).forEach((s,i)=>{const cat=s.category||'otherSites';groups[cat]=groups[cat]||[];groups[cat].push({...s,_i:i});});
       siteList.innerHTML='';
-      const titles={ conversationalAI:'대화형 AI', generativeAI:'생성형 AI', otherSites:'그 외 사이트' };
+      const titles={conversationalAI:'대화형 AI',generativeAI:'생성형 AI',otherSites:'그 외 사이트'};
       Object.keys(groups).forEach(key=>{
         const arr=groups[key]; if(!arr.length) return;
         const wrap=document.createElement('div'); wrap.innerHTML=`<div class="category-title">${titles[key]}</div>`;
         const grid=document.createElement('div'); grid.className='site-grid';
         arr.forEach(item=>{
-          let icon=''; try{ const domain=new URL(item.url).hostname; icon=`https://www.google.com/s2/favicons?domain=${domain}&sz=64`; }catch{}
+          let icon=''; try{const domain=new URL(item.url).hostname; icon=`https://www.google.com/s2/favicons?domain=${domain}&sz=64`;}catch{}
           const card=document.createElement('div'); card.className='site-card';
           card.innerHTML=`
             ${icon?`<img src="${icon}" alt="">`:`<div style="width:18px;height:18px;border-radius:4px;background:#1a2030"></div>`}
@@ -287,8 +221,8 @@ main { padding:16px; max-width:1100px; margin:0 auto; }
               <div class="url"><a href="${item.url||'#'}" target="_blank" rel="noopener">${item.url||''}</a></div>
             </div>
             <div class="actions">
-              <button data-act="edit-site" data-i="${item._i}">수정</button>
-              <button data-act="del-site" data-i="${item._i}">삭제</button>
+              <button data-act="edit-site" data-i="${item._i}" type="button">수정</button>
+              <button data-act="del-site"  data-i="${item._i}" type="button">삭제</button>
             </div>`;
           grid.appendChild(card);
         });
@@ -311,7 +245,10 @@ main { padding:16px; max-width:1100px; margin:0 auto; }
           <td>${s.name}<div class="renew">${s.type==='monthly'?'월간':'연간'} / ${s.currency}</div></td>
           <td>${fmtKRW(monthlyKRW)} <div class="renew">${fmtUSD(monthlyKRW/USD_TO_KRW)}</div></td>
           <td>${renewHtml}</td>
-          <td><button data-act="edit-sub" data-i="${i}">수정</button> <button data-act="del-sub" data-i="${i}">삭제</button></td>`;
+          <td>
+            <button data-act="edit-sub" data-i="${i}" type="button">수정</button>
+            <button data-act="del-sub"  data-i="${i}" type="button">삭제</button>
+          </td>`;
         subList.appendChild(tr);
       });
       const totalMonthlyUSD=totalMonthlyKRW/USD_TO_KRW;
@@ -320,7 +257,7 @@ main { padding:16px; max-width:1100px; margin:0 auto; }
         <div class="total-box"><h4>연간 총 구독료</h4><div class="price-krw">${fmtKRW(totalMonthlyKRW*12)}</div><div class="price-usd">${fmtUSD(totalMonthlyUSD*12)}</div></div>`;
     }
 
-    AppStorage.onChange(state=>{ renderSites(state); renderSubscriptions(state); });
+    AppStorage.onChange(state=>{renderSites(state);renderSubscriptions(state);});
     await AppStorage.init();
 
     formSite.addEventListener('submit',(e)=>{
@@ -333,19 +270,19 @@ main { padding:16px; max-width:1100px; margin:0 auto; }
     formSub.addEventListener('submit',(e)=>{
       e.preventDefault();
       const st=AppStorage.getState();
-      st.subscriptions.push({ name:subName.value.trim(), cost:parseFloat(subCost.value), currency:subCurrency.value, type:subType.value, date:subDate.value });
+      st.subscriptions.push({name:subName.value.trim(),cost:parseFloat(subCost.value),currency:subCurrency.value,type:subType.value,date:subDate.value});
       AppStorage.setState(st); AppStorage.save(); formSub.reset();
     });
 
     document.body.addEventListener('click',(e)=>{
-      const act=e.target?.dataset?.act; if(!act) return;
+      const act=e.target && e.target.dataset && e.target.dataset.act; if(!act) return;
       const i=Number(e.target.dataset.i); const st=AppStorage.getState();
 
       if(act==='del-site'){ if(!Number.isNaN(i)&&confirm('삭제할까요?')){ st.sites.splice(i,1); AppStorage.setState(st); AppStorage.save(); } }
       if(act==='edit-site'){
         const it=st.sites[i]; if(!it) return;
-        document.getElementById('modal-title').textContent='사이트 편집';
-        document.getElementById('modal-body').innerHTML=`
+        modalTitle.textContent='사이트 편집';
+        modalBody.innerHTML=`
           <div class="form row"><label>이름</label><input id="m-name" value="${it.name||''}" /></div>
           <div class="form row"><label>주소</label><input id="m-url" value="${it.url||''}" /></div>
           <div class="form row"><label>카테고리</label>
@@ -354,14 +291,14 @@ main { padding:16px; max-width:1100px; margin:0 auto; }
               <option value="generativeAI" ${it.category==='generativeAI'?'selected':''}>생성형 AI</option>
               <option value="otherSites" ${it.category==='otherSites'?'selected':''}>그 외 사이트</option>
             </select></div>`;
-        document.getElementById('modal').style.display='flex'; window._modalCtx={t:'site',i};
+        modal.style.display='flex'; modalCtx={t:'site',i};
       }
 
       if(act==='del-sub'){ if(!Number.isNaN(i)&&confirm('삭제할까요?')){ st.subscriptions.splice(i,1); AppStorage.setState(st); AppStorage.save(); } }
       if(act==='edit-sub'){
         const s=st.subscriptions[i]; if(!s) return;
-        document.getElementById('modal-title').textContent='구독 편집';
-        document.getElementById('modal-body').innerHTML=`
+        modalTitle.textContent='구독 편집';
+        modalBody.innerHTML=`
           <div class="form row"><label>이름</label><input id="m-sname" value="${s.name}" /></div>
           <div class="form row"><label>구독료</label><input id="m-scost" type="number" min="0" step="any" value="${s.cost}" /></div>
           <div class="form row"><label>통화</label>
@@ -375,12 +312,12 @@ main { padding:16px; max-width:1100px; margin:0 auto; }
               <option value="yearly" ${s.type==='yearly'?'selected':''}>연간</option>
             </select></div>
           <div class="form row"><label>마지막 결제일</label><input id="m-sdate" type="date" value="${s.date}" /></div>`;
-        document.getElementById('modal').style.display='flex'; window._modalCtx={t:'sub',i};
+        modal.style.display='flex'; modalCtx={t:'sub',i};
       }
     });
 
-    document.getElementById('modal-save').addEventListener('click',()=>{
-      const ctx=window._modalCtx; if(!ctx) return;
+    modalSave.addEventListener('click',()=>{
+      const ctx=modalCtx; if(!ctx) return;
       const st=AppStorage.getState();
       if(ctx.t==='site'){
         const i=ctx.i; const name=document.getElementById('m-name').value.trim();
@@ -396,9 +333,8 @@ main { padding:16px; max-width:1100px; margin:0 auto; }
         const date=document.getElementById('m-sdate').value;
         if(!st.subscriptions[i]) return; st.subscriptions[i]={name,cost,currency,type,date}; AppStorage.setState(st); AppStorage.save();
       }
-      document.getElementById('modal').style.display='none'; window._modalCtx=null;
+      modal.style.display='none'; modalCtx=null;
     });
-    document.getElementById('modal-cancel').addEventListener('click',()=>{ document.getElementById('modal').style.display='none'; window._modalCtx=null; });
   });
   </script>
 </body>
